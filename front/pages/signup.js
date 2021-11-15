@@ -34,7 +34,7 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
-    return dispatch({
+    return dispatch({   //폼 제출할때.. 사인업 리퀘스트 디스패치
       type: SIGN_UP_REQUEST,
       data: {
         email,

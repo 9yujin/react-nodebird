@@ -15,7 +15,7 @@ const PostForm = () => {
   }, [imageInput.current]);
 
   useEffect(() => {
-    if (addPostDone) {
+    if (addPostDone) { //에러났을때 지우면 안되니까.. done일때 텍스트 지우기
       setText('');
     }
   }, [addPostDone]);

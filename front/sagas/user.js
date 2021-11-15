@@ -1,5 +1,5 @@
-import { all, delay, fork, put, takeLatest } from 'redux-saga/effects';
-import axios from 'axios';
+import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
+import axios from "axios";
 
 import {
   FOLLOW_FAILURE,
@@ -17,18 +17,19 @@ import {
   UNFOLLOW_FAILURE,
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS,
-} from '../reducers/user';
+} from "../reducers/user";
 
 function logInAPI(data) {
-  return axios.post('/api/login', data);
+  return axios.post("/api/login", data);
 }
 
 function* logIn(action) {
   try {
-    console.log('saga logIn');
+    console.log("saga logIn");
     // const result = yield call(logInAPI);
-    yield delay(1000);
+    yield delay(1000); //1초 뒤에 로그인서세스 액션 실행되고, me에 데이터가 들어가겟지.
     yield put({
+      //디스패치
       type: LOG_IN_SUCCESS,
       data: action.data,
     });
@@ -42,7 +43,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post('/api/logout');
+  return axios.post("/api/logout");
 }
 
 function* logOut() {
@@ -62,7 +63,7 @@ function* logOut() {
 }
 
 function signUpAPI() {
-  return axios.post('/api/signUp');
+  return axios.post("/api/signUp");
 }
 
 function* signUp() {
@@ -82,7 +83,7 @@ function* signUp() {
 }
 
 function followAPI() {
-  return axios.post('/api/follow');
+  return axios.post("/api/follow");
 }
 
 function* follow(action) {
@@ -103,7 +104,7 @@ function* follow(action) {
 }
 
 function unfollowAPI() {
-  return axios.post('/api/unfollow');
+  return axios.post("/api/unfollow");
 }
 
 function* unfollow(action) {
@@ -123,6 +124,7 @@ function* unfollow(action) {
   }
 }
 
+//액션 감지
 function* watchFollow() {
   yield takeLatest(FOLLOW_REQUEST, follow);
 }
