@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import PostForm from '../components/PostForm';
-import PostCard from '../components/PostCard';
-import AppLayout from '../components/AppLayout';
-import { LOAD_POSTS_REQUEST } from '../reducers/post';
+import PostForm from "../components/PostForm";
+import PostCard from "../components/PostCard";
+import AppLayout from "../components/AppLayout";
+import { LOAD_POSTS_REQUEST } from "../reducers/post";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,11 @@ const Home = () => {
 
   useEffect(() => {
     function onScroll() {
-      if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+      if (
+        window.scrollY + document.documentElement.clientHeight >
+        document.documentElement.scrollHeight - 300
+      ) {
+        //300픽셀정도 남았을때 디스패치
         if (hasMorePost && !loadPostsLoading) {
           dispatch({
             type: LOAD_POSTS_REQUEST,
@@ -28,9 +32,9 @@ const Home = () => {
         }
       }
     }
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll);
     return () => {
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [mainPosts, hasMorePost, loadPostsLoading]);
 

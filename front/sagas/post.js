@@ -1,6 +1,6 @@
-import axios from 'axios';
-import shortId from 'shortid';
-import { all, delay, fork, put, takeLatest, throttle } from 'redux-saga/effects';
+import axios from "axios";
+import shortId from "shortid";
+import { all, delay, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
 
 import {
   ADD_COMMENT_FAILURE,
@@ -16,11 +16,11 @@ import {
   REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
-} from '../reducers/post';
-import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
+} from "../reducers/post";
+import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
 function loadPostsAPI(data) {
-  return axios.get('/api/posts', data);
+  return axios.get("/api/posts", data);
 }
 
 function* loadPosts(action) {
@@ -41,24 +41,19 @@ function* loadPosts(action) {
 }
 
 function addPostAPI(data) {
-  return axios.post('/api/post', data);
+  return axios.post("/post", { content: data }); //이렇게 이름을 달아주면 req.body.content로 백에서 받을수이씀
 }
 
 function* addPost(action) {
   try {
-    // const result = yield call(addPostAPI, action.data);
-    yield delay(1000);
-    const id = shortId.generate();
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id,
-        content: action.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: id,
+      data: result.data.id,
     });
   } catch (err) {
     console.error(err);
@@ -70,7 +65,7 @@ function* addPost(action) {
 }
 
 function removePostAPI(data) {
-  return axios.delete('/api/post', data);
+  return axios.delete("/api/post", data);
 }
 
 function* removePost(action) {
@@ -100,8 +95,7 @@ function addCommentAPI(data) {
 
 function* addComment(action) {
   try {
-    // const result = yield call(addCommentAPI, action.data);
-    yield delay(1000);
+    const result = yield call(addCommentAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: action.data,
@@ -131,10 +125,5 @@ function* watchAddComment() {
 }
 
 export default function* postSaga() {
-  yield all([
-    fork(watchAddPost),
-    fork(watchLoadPosts),
-    fork(watchRemovePost),
-    fork(watchAddComment),
-  ]);
+  yield all([fork(watchAddPost), fork(watchLoadPosts), fork(watchRemovePost), fork(watchAddComment)]);
 }
